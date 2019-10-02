@@ -1,42 +1,53 @@
-# simple password generator 
-    
+'''
+    A simple python script to generate passwords. The passwords are generated from the 
+    passwordGenerator method. The generated passwords are stored/not stored in a file
+    depending on the user's preference
+'''
+
 import random
 import string
 
-lenstr = int(input("Enter Length of String: "))
-N = int(input("Enter no of password combo need to generated: "))
-q1 = input("do you need to save output in file[Y/N]: ")
+'''
+    Method name:
+        passwordGenerator(len_of_password, save)
+    Arguements:
+        len_of_password (int): The length of the password to be generated.
+        save (char): A char arguement which either contains Y/N depending on whether the 
+                    passwords need to be saved in a file
+    Returns:
+        None: When the method finishes executing the passwords are saved in a file.
+'''
 
-# password generate function
-def pwd(N,lenstr,q1):
-    pwd = ""
+def passwordGenerator(len_of_password, save):
+    
+    password = ""
     count = 0
     
-    while count != lenstr:        #takes random variable one by one and add to string until reaches lenstr
-
-        upper = [random.choice(string.ascii_uppercase)]  #ABCDEFGHIJKLMNOPQRSTUVWXYZ
-        lower = [random.choice(string.ascii_lowercase)]  #abcdefghijklmnopqrstuvwxyz
-        num = [random.choice(string.digits)]             #0123456789
-        symbol = [random.choice(string.punctuation)]     # #@!$%^&*()-+[]{}~,./\?<>;:_=    #without whitespace and quotes
+    while count != len_of_password:  # count keeps track of the number of characters in the password
+        upper = [random.choice(string.ascii_uppercase)]  # all upper case alphabets
+        lower = [random.choice(string.ascii_lowercase)]  # all lower case alphabets
+        num = [random.choice(string.digits)]             # all digits
+        symbol = [random.choice(string.punctuation)]     # all special characters except spaces
         everything = upper + lower + num + symbol
 
-        pwd += random.choice(everything)
+        password += random.choice(everything)
         count += 1
         continue
 
-    if count == lenstr:  #count reaches length
-        print (pwd)
+    if save == 'y':                      # if yes store the passwords to file
+        with open('pass.txt','a') as file_:         # append every password to the file
+            print(password, file = file_)
 
-    if q1 == 'Y' or q1 == 'y':                      #if yes store the passwords to file
-        with open('pass.txt','a') as file_:         #appends text each time
-            print(pwd, file = file_)
+if __name__ == "__main__":
+    len_of_password = int(input("Enter length of the password needed: "))
+    number_of_passwords = int(input("Enter the number of passwords needed to be generated: "))
+    save = input("Do you want the passwords to be saved in an output file[Y/N]: ")
 
-# result
-print("\nPasswords are:\n"+"-"*100)
-for i in range(0,N):
-    pwd(N,lenstr,q1)
+    save = str.lower(save)
 
-print("-"*100)
+    for i in range(0,number_of_passwords):
+        passwordGenerator(len_of_password,save)
 
-if q1 == 'Y' or q1 == 'y':
-    print("passwords are stored in pass.txt")  #notify user
+    if save == 'y':
+        # Notify the user about the file where the passwords are saved
+        print("Passwords are stored in pass.txt")
